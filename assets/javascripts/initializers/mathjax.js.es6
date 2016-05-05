@@ -3,12 +3,11 @@
 import { withPluginApi, decorateCooked } from 'discourse/lib/plugin-api';
 import loadScript from 'discourse/lib/load-script';
 
-function applyBody($html) {
-  MathJax.Hub.Queue(["Typeset", MathJax.Hub, $html[0]]);
+function oldApplyBody() {
+  MathJax.Hub.Queue(["Typeset", MathJax.Hub, "topic"]);
 }
 
-  /*
-function applyPreview() {
+function oldApplyPreview() {
   MathJax.Hub.Queue(["Typeset", MathJax.Hub, "wmd-preview"]);
   // if the caret is on the last line ensure preview scrolled to bottom
   const caretPosition = Discourse.Utilities.caretPosition(this.wmdInput[0]);
@@ -19,7 +18,10 @@ function applyPreview() {
     }
   }
 }
-*/
+
+function applyBody($html) {
+  MathJax.Hub.Queue(["Typeset", MathJax.Hub, $html[0]]);
+}
 
 function mathJaxConfig() {
   MathJax.Hub.Config({
@@ -58,7 +60,7 @@ function mathJaxConfig() {
   });
 }
 
-/*
+
 function oldCode(container) {
   const siteSettings = container.lookup('site-settings:main');
   if (!siteSettings.enable_mathjax_plugin) { return; }
@@ -66,11 +68,11 @@ function oldCode(container) {
   loadScript(siteSettings.mathjax_url + '?config=' + siteSettings.mathjax_config, { scriptTag: true }).then(function () {
     mathJaxConfig();
 
-    decorateCooked(container, applyBody);
-    container.lookupFactory('view:composer').prototype.on("previewRefreshed", applyPreview);
+    decorateCooked(container, oldApplyBody);
+    container.lookupFactory('view:composer').prototype.on("previewRefreshed", oldApplyPreview);
   });
 }
-*/
+
 
 function initializePlugin(api) {
   const container = api.container;
@@ -79,11 +81,7 @@ function initializePlugin(api) {
 
   loadScript(siteSettings.mathjax_url + '?config=' + siteSettings.mathjax_config, { scriptTag: true }).then(function () {
     mathJaxConfig();
-
-    //api.decorateCooked(applyBody, {onlyStream: 1});
     api.decorateCooked(applyBody);
-    //api.decorate(ComposerEditor, 'previewRefreshed', applyPreview);
-    //container.lookupFactory('view:composer').prototype.on("previewRefreshed", applyPreview);
   });
 }
 
@@ -91,13 +89,7 @@ export default {
   name: 'discourse-mathjax',
   after: 'inject-objects',
 
-  /*
-  initialize: function (container) {
-    oldCode(container);
-  }
-  */
-  initialize() {
-     //withPluginApi('0.1', api => initializePlugin(api), { noApi: () => oldCode() });
-     withPluginApi('0.1', api => initializePlugin(api));
+  initialize(container) {
+     withPluginApi('0.1', api => initializePlugin(api), { noApi: () => oldCode(container) });
   }
 };
