@@ -65,11 +65,11 @@ export default {
       });
 
       withPluginApi('0.1', api => {
-          api.decorateCooked(container, applyBody);
+          api.decorateCooked(applyBody);
           //container.lookupFactory('view:composer').prototype.on("previewRefreshed", applyPreview);
           //api.onPageChange(() => console.log('user navigated!'));
       }, { noApi: () => {
-           decorateCooked(container, applyBody);
+          decorateCooked(container, applyBody);
           container.lookupFactory('view:composer').prototype.on("previewRefreshed", applyPreview);
       }});
     });
