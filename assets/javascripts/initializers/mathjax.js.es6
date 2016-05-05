@@ -3,10 +3,12 @@
 import { withPluginApi, decorateCooked } from 'discourse/lib/plugin-api';
 import loadScript from 'discourse/lib/load-script';
 
-function applyBody() {
+function applyBody($html) {
   console.log('apply Body!')
   //MathJax.Hub.Queue(["Typeset", MathJax.Hub, "topic"]);
+  MathJax.Hub.Typeset($html[0])();
   MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
+  //MathJax.Hub.Queue(["Typeset", MathJax.Hub, $html[0]]);
 }
 
 function applyPreview() {
