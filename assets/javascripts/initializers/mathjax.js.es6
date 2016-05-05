@@ -1,9 +1,10 @@
 /* global MathJax */
 
-import { decorateCooked } from 'discourse/lib/plugin-api';
+import { withPluginApi, decorateCooked } from 'discourse/lib/plugin-api';
 import loadScript from 'discourse/lib/load-script';
 
 function applyBody() {
+  console.log('apply Body!')
   MathJax.Hub.Queue(["Typeset", MathJax.Hub, "topic"]);
 }
 
@@ -68,11 +69,31 @@ function oldCode(container) {
   });
 }
 
+function initializePlugin(api) {
+  const container = api.container;
+  const siteSettings = container.lookup('site-settings:main');
+  if (!siteSettings.enable_mathjax_plugin) { return; }
+
+  loadScript(siteSettings.mathjax_url + '?config=' + siteSettings.mathjax_config, { scriptTag: true }).then(function () {
+    mathJaxConfig();
+
+    api.decorateCooked(applyBody, {onlyStream: 1});
+    //api.decorate(ComposerEditor, 'previewRefreshed', applyPreview);
+    //container.lookupFactory('view:composer').prototype.on("previewRefreshed", applyPreview);
+  });
+}
+
 export default {
   name: 'discourse-mathjax',
   after: 'inject-objects',
 
+  /*
   initialize: function (container) {
     oldCode(container);
+  }
+  */
+  initialize() {
+     //withPluginApi('0.1', api => initializePlugin(api), { noApi: () => oldCode() });
+     withPluginApi('0.1', api => initializePlugin(api));
   }
 };
