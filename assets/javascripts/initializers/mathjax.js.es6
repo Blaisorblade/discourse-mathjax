@@ -1,6 +1,6 @@
 /* global MathJax */
 
-import { decorateCooked } from 'discourse/lib/plugin-api';
+import { withPluginApi } from 'discourse/lib/plugin-api';
 import loadScript from 'discourse/lib/load-script';
 
 function applyBody() {
@@ -64,8 +64,14 @@ export default {
         messageStyle: "none"
       });
 
-      decorateCooked(container, applyBody);
-      container.lookupFactory('view:composer').prototype.on("previewRefreshed", applyPreview);
+      withPluginApi('0.1', api => {
+          api.decorateCooked(container, applyBody);
+          //container.lookupFactory('view:composer').prototype.on("previewRefreshed", applyPreview);
+          //api.onPageChange(() => console.log('user navigated!'));
+      }, { noApi: () =>
+           decorateCooked(container, applyBody);
+           container.lookupFactory('view:composer').prototype.on("previewRefreshed", applyPreview);
+      });
     });
   }
 };
