@@ -68,10 +68,10 @@ export default {
           api.decorateCooked(container, applyBody);
           //container.lookupFactory('view:composer').prototype.on("previewRefreshed", applyPreview);
           //api.onPageChange(() => console.log('user navigated!'));
-      }, { noApi: () =>
+      }, { noApi: () => {
            decorateCooked(container, applyBody);
-           container.lookupFactory('view:composer').prototype.on("previewRefreshed", applyPreview);
-      });
+          container.lookupFactory('view:composer').prototype.on("previewRefreshed", applyPreview);
+      }});
     });
   }
 };
