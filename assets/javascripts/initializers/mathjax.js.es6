@@ -5,10 +5,12 @@ import loadScript from 'discourse/lib/load-script';
 
 function applyBody() {
   console.log('apply Body!')
-  MathJax.Hub.Queue(["Typeset", MathJax.Hub, "topic"]);
+  //MathJax.Hub.Queue(["Typeset", MathJax.Hub, "topic"]);
+  MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
 }
 
 function applyPreview() {
+  /*
   MathJax.Hub.Queue(["Typeset", MathJax.Hub, "wmd-preview"]);
   // if the caret is on the last line ensure preview scrolled to bottom
   const caretPosition = Discourse.Utilities.caretPosition(this.wmdInput[0]);
@@ -18,6 +20,7 @@ function applyPreview() {
       $wmdPreview.scrollTop($wmdPreview[0].scrollHeight);
     }
   }
+  */
 }
 
 function mathJaxConfig() {
@@ -57,6 +60,7 @@ function mathJaxConfig() {
   });
 }
 
+/*
 function oldCode(container) {
   const siteSettings = container.lookup('site-settings:main');
   if (!siteSettings.enable_mathjax_plugin) { return; }
@@ -68,6 +72,7 @@ function oldCode(container) {
     container.lookupFactory('view:composer').prototype.on("previewRefreshed", applyPreview);
   });
 }
+*/
 
 function initializePlugin(api) {
   const container = api.container;
@@ -77,7 +82,8 @@ function initializePlugin(api) {
   loadScript(siteSettings.mathjax_url + '?config=' + siteSettings.mathjax_config, { scriptTag: true }).then(function () {
     mathJaxConfig();
 
-    api.decorateCooked(applyBody, {onlyStream: 1});
+    //api.decorateCooked(applyBody, {onlyStream: 1});
+    api.decorateCooked(applyBody);
     //api.decorate(ComposerEditor, 'previewRefreshed', applyPreview);
     //container.lookupFactory('view:composer').prototype.on("previewRefreshed", applyPreview);
   });
