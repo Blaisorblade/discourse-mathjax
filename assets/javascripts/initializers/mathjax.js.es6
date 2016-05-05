@@ -5,14 +5,11 @@ import loadScript from 'discourse/lib/load-script';
 
 function applyBody($html) {
   console.log('apply Body!')
-  //MathJax.Hub.Queue(["Typeset", MathJax.Hub, "topic"]);
   MathJax.Hub.Typeset($html[0])();
-  MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
-  //MathJax.Hub.Queue(["Typeset", MathJax.Hub, $html[0]]);
 }
 
-function applyPreview() {
   /*
+function applyPreview() {
   MathJax.Hub.Queue(["Typeset", MathJax.Hub, "wmd-preview"]);
   // if the caret is on the last line ensure preview scrolled to bottom
   const caretPosition = Discourse.Utilities.caretPosition(this.wmdInput[0]);
@@ -22,8 +19,8 @@ function applyPreview() {
       $wmdPreview.scrollTop($wmdPreview[0].scrollHeight);
     }
   }
-  */
 }
+*/
 
 function mathJaxConfig() {
   MathJax.Hub.Config({
